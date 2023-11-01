@@ -11,17 +11,16 @@ function KtoC(k) {
   const inp = document.querySelector(".inp");
 }
 
-
 const initial = `https://api.openweathermap.org/data/2.5/weather?q=${loc}&appid=${key}`;
 async function updateData(url) {
   if (loc !== "") {
     try {
-      l.innerHTML = `<h1>
-	${loc.toUpperCase()}</h1>`;
-	console.log(url);
       const response = await fetch(url);
       const result = await response.json();
-		console.log(result);
+      l.innerHTML = `<h1>
+	  ${loc.toUpperCase()}</h1>`;
+      console.log(url);
+      console.log(result);
       //updating  the temprature
       let t = KtoC(result.main.temp);
       let min_t = KtoC(result.main.temp_min);
@@ -40,6 +39,11 @@ async function updateData(url) {
       let weather = result.weather[0].main;
       press.innerHTML = `Pressure: ${pre}atm</br>Humidity:  ${humid}%</br>Weather: ${weather}`;
     } catch (error) {
+		l.innerHTML = `<h1>Enter A Valid Location!</h1>`;
+		temp.innerHTML = "N.A.";
+		wind.innerHTML = "N.A.";
+		press.innerHTML = "N.A.";
+		
       console.error(error);
     } finally {
       console.log("process completed");
@@ -53,10 +57,10 @@ updateData(initial);
 // taking location form the input bar
 
 document.addEventListener("keyup", function (e) {
-	if (e.key === "Enter") {
-	  console.log("hello world");
-	  loc = document.querySelector(".form-control").value;
-	  var new_url = `https://api.openweathermap.org/data/2.5/weather?q=${loc}&appid=${key}`;
-	  updateData(new_url);
-	}
-  });
+  if (e.key === "Enter") {
+    console.log("hello world");
+    loc = document.querySelector(".form-control").value;
+    var new_url = `https://api.openweathermap.org/data/2.5/weather?q=${loc}&appid=${key}`;
+    updateData(new_url);
+  }
+});
