@@ -1,4 +1,4 @@
-loc = `new delhi`;
+let loc = `new delhi`;
 const key = `fee915bc2f0cffb4bf8676829193719c`;
 
 let l = document.querySelector(".loc");
@@ -7,13 +7,10 @@ let wind = document.querySelector(".wind");
 let press = document.querySelector(".pressure");
 
 function KtoC(k) {
-  return (k - 273.15).toFixed(3);
-  const inp = document.querySelector(".inp");
+  return (k - 273.15).toFixed(3); 
 }
-
-const initial = `https://api.openweathermap.org/data/2.5/weather?q=${loc}&appid=${key}`;
-async function updateData(url) {
-  if (loc !== "") {
+async function updateData(location) {
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${key}`;
     try {
       const response = await fetch(url);
       const result = await response.json();
@@ -48,19 +45,30 @@ async function updateData(url) {
     } finally {
       console.log("process completed");
     }
-  } else {
-    alert("enter a valid location!");
-    console.log("enter a valid location");
-  }
-}
-updateData(initial);
+  } 
 // taking location form the input bar
+updateData(loc);
+  
+//document.querySelector('.take-input').addEventListener('keydown')
 
-document.addEventListener("keyup", function (e) {
-  if (e.key === "Enter") {
+document.querySelector(".take-input").addEventListener("keydown",function(e)
+{
+  if(e.key == 'Enter')
+  {
+  loc = document.querySelector(".form-control").value;
+  console.log(loc);
+  updateData(loc);
+  e.preventDefault();
+    }
+
+},false)
+
+const inp = document.querySelector(".btn");
+inp.addEventListener("click", function (e) {
+
     console.log("hello world");
     loc = document.querySelector(".form-control").value;
-    var new_url = `https://api.openweathermap.org/data/2.5/weather?q=${loc}&appid=${key}`;
-    updateData(new_url);
-  }
-});
+    console.log(loc);
+    updateData(loc);
+
+},false);
