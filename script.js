@@ -1,4 +1,30 @@
-let loc = `new delhi`;
+
+// fetching the current location
+loc = `new delhi`;
+function getLoc() {
+  if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(getCity);
+  } else {
+      console.log("Geolocation is not supported by this browser.");
+  }
+}
+
+async function getCity(position) {
+  let longi = position.coords.longitude;
+  let latti = position.coords.latitude; 
+  console.log(latti,longi)
+  let url = `https://api.opencagedata.com/geocode/v1/json?q=${latti}+${longi}&key=d3506274bb594441a91e136dfd1efff2`;
+  
+  const resp = await fetch(url);
+  const obj = await resp.json();
+  loc = obj.results[0].components.city;
+   console.log(loc);
+   updateData(loc);
+}
+
+getLoc();
+console.log(loc)
+
 const key = `fee915bc2f0cffb4bf8676829193719c`;
 
 let l = document.querySelector(".loc");
@@ -16,8 +42,8 @@ async function updateData(location) {
       const result = await response.json();
       l.innerHTML = `<h1>
 	  ${loc.toUpperCase()}</h1>`;
-      console.log(url);
-      console.log(result);
+      // console.log(url);
+     // console.log(result);
       //updating  the temprature
       let t = KtoC(result.main.temp);
       let min_t = KtoC(result.main.temp_min);
@@ -47,6 +73,7 @@ async function updateData(location) {
     }
   } 
 // taking location form the input bar
+if(temp.innerHTML==="")
 updateData(loc);
   
 //document.querySelector('.take-input').addEventListener('keydown')
@@ -61,7 +88,7 @@ document.querySelector(".take-input").addEventListener("keydown",function(e)
   e.preventDefault();
     }
 
-},false)
+},false)                                          
 
 const inp = document.querySelector(".btn");
 inp.addEventListener("click", function (e) {
